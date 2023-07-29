@@ -5,6 +5,7 @@ import Drop from './components/Drop'
 import { useAtom } from 'jotai'
 import Settings from './components/Settings'
 import { fileAtom, settingAtom } from './jotai'
+import Footer from './components/footer'
 
 function App() {
   const canvasRef = useRef<HTMLDivElement>(null)
@@ -44,64 +45,28 @@ function App() {
   }, [canvasRef])
 
   return (
-    <>
-      <Drop />
-      <Settings />
-      {file && (
-        <>
-          <Text>Preview ↓</Text>
-          <Box
-            transform='scale(0.4)'
-            // transformOrigin='top left'
-            m={`calc(-${setting.height}px / 10 * 3) calc(-${setting.width}px / 10 * 3)`}
-            bg={setting.paddingColor}
-            pt={`${setting.paddingTop}px`}
-            pl={`${setting.paddingLeft}px`}
-            pb={`${setting.paddingBottom}px`}
-            pr={`${setting.paddingRight}px`}
-            width={`${setting.width}px`}
-            height={`${setting.height}px`}
-            className={css`
-              box-sizing: border-box;
-            `}
-          >
-            <Image
-              src={file.toString()}
-              width='100%'
-              height='100%'
-              borderRadius={`${setting.corner}px`}
+    <Box display='flex' flexDir='column' minHeight='100vh'>
+      <Box as='main' flex='1'>
+        <Drop />
+        <Settings />
+        {file && (
+          <>
+            <Text>Preview ↓</Text>
+            <Box
+              transform='scale(0.4)'
+              // transformOrigin='top left'
+              m={`calc(-${setting.height}px / 10 * 3) calc(-${setting.width}px / 10 * 3)`}
+              bg={setting.paddingColor}
+              pt={`${setting.paddingTop}px`}
+              pl={`${setting.paddingLeft}px`}
+              pb={`${setting.paddingBottom}px`}
+              pr={`${setting.paddingRight}px`}
+              width={`${setting.width}px`}
+              height={`${setting.height}px`}
               className={css`
-                object-fit: cover;
-                object-position: center;
-                pointer-events: none;
+                box-sizing: border-box;
               `}
-              display='block'
-            />
-          </Box>
-          <Button py={8} px={16}  bg='black' color='white' borderRadius={0} _hover={{ opacity: 0.8 }} onClick={bundleExport}>
-            export
-          </Button>
-        </>
-      )}
-      <Box
-        position='absolute'
-        top='-9999px'
-        left='-9999px'
-      >
-        <div ref={canvasRef}>
-          <Box
-            bg={setting.paddingColor}
-            pt={`${setting.paddingTop}px`}
-            pl={`${setting.paddingLeft}px`}
-            pb={`${setting.paddingBottom}px`}
-            pr={`${setting.paddingRight}px`}
-            width={`${setting.width}px`}
-            height={`${setting.height}px`}
-            className={css`
-              box-sizing: border-box;
-            `}
-          >
-            {file && (
+            >
               <Image
                 src={file.toString()}
                 width='100%'
@@ -114,11 +79,54 @@ function App() {
                 `}
                 display='block'
               />
-            )}
-          </Box>
-        </div>
+            </Box>
+            <Button
+              py={8}
+              px={16}
+              bg='black'
+              color='white'
+              borderRadius={0}
+              _hover={{ opacity: 0.8 }}
+              onClick={bundleExport}
+            >
+              export
+            </Button>
+          </>
+        )}
+        <Box position='absolute' top='-9999px' left='-9999px'>
+          <div ref={canvasRef}>
+            <Box
+              bg={setting.paddingColor}
+              pt={`${setting.paddingTop}px`}
+              pl={`${setting.paddingLeft}px`}
+              pb={`${setting.paddingBottom}px`}
+              pr={`${setting.paddingRight}px`}
+              width={`${setting.width}px`}
+              height={`${setting.height}px`}
+              className={css`
+                box-sizing: border-box;
+              `}
+            >
+              {file && (
+                <Image
+                  src={file.toString()}
+                  width='100%'
+                  height='100%'
+                  borderRadius={`${setting.corner}px`}
+                  className={css`
+                    object-fit: cover;
+                    object-position: center;
+                    pointer-events: none;
+                  `}
+                  display='block'
+                />
+              )}
+            </Box>
+          </div>
+        </Box>
       </Box>
-    </>
+      <Footer />
+    </Box>
   )
 }
 
